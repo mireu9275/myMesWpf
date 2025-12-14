@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:enums="clr-namespace:MesClient.Core.Enums;assembly=MesClient.Core"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
 
@@ -83,14 +84,15 @@
                           Margin="0,0,16,0" />
 
                 <ComboBox Width="150"
+                          ItemsSource="{Binding StatusOptions}"
                           SelectedItem="{Binding SelectedStatus}"
                           materialDesign:HintAssist.Hint="상태 선택"
                           Margin="0,0,16,0">
-                    <ComboBoxItem Content="전체" />
-                    <ComboBoxItem Content="가동중" />
-                    <ComboBoxItem Content="대기중" />
-                    <ComboBoxItem Content="고장" />
-                    <ComboBoxItem Content="정비중" />
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EquipmentStatusToStringConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
 
                 <TextBox Style="{StaticResource SearchTextBox}"
@@ -120,17 +122,17 @@
                         <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Content="가동"
                                 Command="{Binding ChangeStatusCommand}"
-                                CommandParameter="Running"
+                                CommandParameter="{x:Static enums:EquipmentStatus.Running}"
                                 Margin="0,0,8,0" />
                         <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Content="대기"
                                 Command="{Binding ChangeStatusCommand}"
-                                CommandParameter="Idle"
+                                CommandParameter="{x:Static enums:EquipmentStatus.Idle}"
                                 Margin="0,0,8,0" />
                         <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Content="정비"
                                 Command="{Binding ChangeStatusCommand}"
-                                CommandParameter="Maintenance"
+                                CommandParameter="{x:Static enums:EquipmentStatus.Maintenance}"
                                 Foreground="{StaticResource WarningBrush}" />
                     </StackPanel>
                     <Border />

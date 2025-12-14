@@ -72,8 +72,15 @@ public partial class ProductionViewModel : ViewModelBase
 
     private async Task LoadLineCodesAsync()
     {
-        var equipmentsByLine = await _equipmentService.GetEquipmentsByLineAsync();
-        LineCodes = new ObservableCollection<string>(equipmentsByLine.Keys);
+        await ExecuteAsync(async () =>
+        {
+            var equipmentsByLine = await _equipmentService.GetEquipmentsByLineAsync();
+            var lineCodes = equipmentsByLine.Keys
+                .Where(k => !string.IsNullOrWhiteSpace(k))
+                .OrderBy(k => k)
+                .ToList();
+            LineCodes = new ObservableCollection<string>(lineCodes);
+        });
     }
 
     [RelayCommand]

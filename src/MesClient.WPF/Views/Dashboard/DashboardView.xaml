@@ -237,7 +237,7 @@
 
                         <DockPanel Grid.Row="0">
                             <TextBlock Text="활성 알람" Style="{StaticResource SectionTitle}" DockPanel.Dock="Left" />
-                            <materialDesign:Badged Badge="{Binding ActiveAlarms.Count}"
+                            <materialDesign:Badged Badge="{Binding ActiveAlarms.Count, Mode=OneWay}"
                                                    BadgeColorZoneMode="PrimaryDark"
                                                    DockPanel.Dock="Left"
                                                    Margin="8,0" />

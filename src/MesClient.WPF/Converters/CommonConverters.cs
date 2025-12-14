@@ -58,6 +58,25 @@ public class NullToVisibilityConverter : IValueConverter
 }
 
 /// <summary>
+/// Null -> Boolean 컨버터
+/// </summary>
+public class NullToBooleanConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        var invert = parameter?.ToString() == "Invert";
+        var result = value != null;
+        if (invert) result = !result;
+        return result;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
 /// 설비 상태 -> 색상 컨버터
 /// </summary>
 public class EquipmentStatusToColorConverter : IValueConverter
@@ -178,6 +197,38 @@ public class EnumDescriptionConverter : IValueConverter
         }
 
         return value.ToString() ?? string.Empty;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
+/// EquipmentStatus -> 문자열 컨버터
+/// </summary>
+public class EquipmentStatusToStringConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value == null) return "전체";
+        
+        if (value is EquipmentStatus status)
+        {
+            return status switch
+            {
+                EquipmentStatus.Running => "가동중",
+                EquipmentStatus.Idle => "대기중",
+                EquipmentStatus.Down => "고장",
+                EquipmentStatus.Maintenance => "정비중",
+                EquipmentStatus.Setup => "셋업중",
+                EquipmentStatus.Offline => "오프라인",
+                _ => status.ToString()
+            };
+        }
+        
+        return "전체";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

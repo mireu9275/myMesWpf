@@ -111,7 +111,7 @@
                             <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                                     Content="시작"
                                     Command="{Binding StartWorkOrderCommand}"
-                                    IsEnabled="{Binding SelectedWorkOrder, Converter={StaticResource NullToVisibilityConverter}}"
+                                    IsEnabled="{Binding SelectedWorkOrder, Converter={StaticResource NullToBooleanConverter}}"
                                     Margin="0,0,8,0" />
                             <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                                     Content="일시정지"
@@ -176,7 +176,7 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Foreground="{StaticResource TextSecondaryBrush}">
                                 <Run Text="총" />
-                                <Run Text="{Binding WorkOrders.Count}" FontWeight="Bold" />
+                                <Run Text="{Binding WorkOrders.Count, Mode=OneWay}" FontWeight="Bold" />
                                 <Run Text="건" />
                             </TextBlock>
                             <TextBlock Margin="24,0,0,0" Foreground="{StaticResource TextSecondaryBrush}"

@@ -104,6 +104,7 @@ public class EquipmentService : IEquipmentService
         {
             var equipments = await GetEquipmentsAsync();
             return equipments
+                .Where(e => !string.IsNullOrWhiteSpace(e.LineCode))
                 .GroupBy(e => e.LineCode)
                 .ToDictionary(g => g.Key, g => g.AsEnumerable());
         }

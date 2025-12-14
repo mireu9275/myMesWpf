@@ -35,6 +35,9 @@ public partial class EquipmentViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<string> _lineCodes = new();
 
+    [ObservableProperty]
+    private ObservableCollection<EquipmentStatus?> _statusOptions = new();
+
     // 상태별 통계
     [ObservableProperty]
     private int _runningCount;
@@ -58,6 +61,16 @@ public partial class EquipmentViewModel : ViewModelBase
         Title = "설비관리";
 
         _equipmentService.StatusChanged += OnEquipmentStatusChanged;
+
+        // 상태 옵션 초기화
+        StatusOptions = new ObservableCollection<EquipmentStatus?>
+        {
+            null, // 전체
+            EquipmentStatus.Running,
+            EquipmentStatus.Idle,
+            EquipmentStatus.Down,
+            EquipmentStatus.Maintenance
+        };
     }
 
     public override async Task InitializeAsync()
@@ -97,7 +110,11 @@ public partial class EquipmentViewModel : ViewModelBase
         await ExecuteAsync(async () =>
         {
             var equipmentsByLine = await _equipmentService.GetEquipmentsByLineAsync();
-            LineCodes = new ObservableCollection<string>(equipmentsByLine.Keys);
+            var lineCodes = equipmentsByLine.Keys
+                .Where(k => !string.IsNullOrWhiteSpace(k))
+                .OrderBy(k => k)
+                .ToList();
+            LineCodes = new ObservableCollection<string>(lineCodes);
 
             var allEquipments = equipmentsByLine.Values.SelectMany(e => e);
 

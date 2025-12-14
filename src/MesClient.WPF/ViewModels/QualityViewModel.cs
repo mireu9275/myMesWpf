@@ -47,6 +47,14 @@ public partial class QualityViewModel : ViewModelBase
         _dialogService = dialogService;
 
         Title = "품질관리";
+        
+        // Summary 초기화
+        Summary = new QualitySummary
+        {
+            TotalInspections = 0,
+            PassCount = 0,
+            FailCount = 0
+        };
     }
 
     public override async Task InitializeAsync()

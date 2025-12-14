@@ -7,6 +7,8 @@
     <converters:InverseBooleanConverter x:Key="InverseBoolConverter" />
     <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
     <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    <converters:NullToBooleanConverter x:Key="NullToBooleanConverter" />
+    <converters:EquipmentStatusToStringConverter x:Key="EquipmentStatusToStringConverter" />
     <converters:EquipmentStatusToColorConverter x:Key="EquipmentStatusToColorConverter" />
     <converters:WorkOrderStatusToColorConverter x:Key="WorkOrderStatusToColorConverter" />
     <converters:PercentageConverter x:Key="PercentageConverter" />

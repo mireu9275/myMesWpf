@@ -34,7 +34,7 @@
             <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="180">
                 <StackPanel>
                     <TextBlock Text="총 검사건수" Style="{StaticResource CardTitle}" />
-                    <TextBlock Text="{Binding Summary.TotalInspections, StringFormat=N0}" 
+                    <TextBlock Text="{Binding Summary.TotalInspections, StringFormat=N0, Mode=OneWay}" 
                                FontSize="28" FontWeight="Bold" 
                                Margin="0,8,0,0" />
                 </StackPanel>
@@ -43,7 +43,7 @@
             <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="180">
                 <StackPanel>
                     <TextBlock Text="합격" Style="{StaticResource CardTitle}" />
-                    <TextBlock Text="{Binding Summary.PassCount, StringFormat=N0}" 
+                    <TextBlock Text="{Binding Summary.PassCount, StringFormat=N0, Mode=OneWay}" 
                                FontSize="28" FontWeight="Bold" 
                                Foreground="{StaticResource SuccessBrush}"
                                Margin="0,8,0,0" />
@@ -53,7 +53,7 @@
             <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="180">
                 <StackPanel>
                     <TextBlock Text="불합격" Style="{StaticResource CardTitle}" />
-                    <TextBlock Text="{Binding Summary.FailCount, StringFormat=N0}" 
+                    <TextBlock Text="{Binding Summary.FailCount, StringFormat=N0, Mode=OneWay}" 
                                FontSize="28" FontWeight="Bold" 
                                Foreground="{StaticResource ErrorBrush}"
                                Margin="0,8,0,0" />
@@ -66,7 +66,7 @@
                     <TextBlock FontSize="28" FontWeight="Bold" 
                                Foreground="{StaticResource PrimaryBrush}"
                                Margin="0,8,0,0">
-                        <Run Text="{Binding Summary.PassRate, StringFormat=F1}" />
+                        <Run Text="{Binding Summary.PassRate, StringFormat=F1, Mode=OneWay}" />
                         <Run Text="%" FontSize="16" />
                     </TextBlock>
                 </StackPanel>
