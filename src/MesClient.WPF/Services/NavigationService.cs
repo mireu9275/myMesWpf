@@ -33,18 +33,12 @@ public class NavigationService : INavigationService
             _navigationStack.Push(viewName);
             _currentView = viewName;
 
-            // MainViewModel에 현재 ViewModel 설정
-            var mainViewModel = _serviceProvider.GetService<MainViewModel>();
-            if (mainViewModel != null)
-            {
-                mainViewModel.CurrentViewModel = viewModel;
-            }
-
             _ = viewModel.InitializeAsync();
 
             Navigated?.Invoke(this, new NavigationEventArgs 
             { 
                 ViewName = viewName, 
+                ViewModel = viewModel,
                 Parameter = parameter 
             });
         }
