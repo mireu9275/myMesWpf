@@ -21,7 +21,10 @@ public class QualityService : IQualityService
     {
         try
         {
-            return await _apiClient.PostAsync<QualityInspectionInput, QualityInspection>("/api/quality/inspections", input);
+            var result = await _apiClient.PostAsync<QualityInspectionInput, QualityInspection>("/api/quality/inspections", input);
+            if (result == null)
+                throw new InvalidOperationException("API 응답이 null입니다.");
+            return result;
         }
         catch
         {
@@ -60,7 +63,7 @@ public class QualityService : IQualityService
         try
         {
             var queryString = string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"));
-            return await _apiClient.GetAsync<IEnumerable<QualityInspection>>("/api/quality/inspections?" + queryString);
+            return await _apiClient.GetAsync<IEnumerable<QualityInspection>>("/api/quality/inspections?" + queryString) ?? Enumerable.Empty<QualityInspection>();
         }
         catch
         {
@@ -72,7 +75,7 @@ public class QualityService : IQualityService
     {
         try
         {
-            return await _apiClient.GetAsync<IEnumerable<QualityInspection>>($"/api/quality/inspections/lot/{lotNo}");
+            return await _apiClient.GetAsync<IEnumerable<QualityInspection>>($"/api/quality/inspections/lot/{lotNo}") ?? Enumerable.Empty<QualityInspection>();
         }
         catch
         {
@@ -85,7 +88,10 @@ public class QualityService : IQualityService
         try
         {
             var queryParams = $"fromDate={fromDate:yyyy-MM-dd}&toDate={toDate:yyyy-MM-dd}";
-            return await _apiClient.GetAsync<QualitySummary>($"/api/quality/summary?{queryParams}");
+            var result = await _apiClient.GetAsync<QualitySummary>($"/api/quality/summary?{queryParams}");
+            if (result == null)
+                throw new InvalidOperationException("API 응답이 null입니다.");
+            return result;
         }
         catch
         {
@@ -104,7 +110,10 @@ public class QualityService : IQualityService
         try
         {
             var queryParams = $"fromDate={fromDate:yyyy-MM-dd}&toDate={toDate:yyyy-MM-dd}";
-            return await _apiClient.GetAsync<IDictionary<string, int>>($"/api/quality/defects/statistics?{queryParams}");
+            var result = await _apiClient.GetAsync<IDictionary<string, int>>($"/api/quality/defects/statistics?{queryParams}");
+            if (result == null)
+                throw new InvalidOperationException("API 응답이 null입니다.");
+            return result;
         }
         catch
         {

@@ -30,7 +30,7 @@ public class AlarmService : IAlarmService
     {
         try
         {
-            return await _apiClient.GetAsync<IEnumerable<Alarm>>("/api/alarms/active");
+            return await _apiClient.GetAsync<IEnumerable<Alarm>>("/api/alarms/active") ?? Enumerable.Empty<Alarm>();
         }
         catch
         {
@@ -60,7 +60,7 @@ public class AlarmService : IAlarmService
         try
         {
             var queryString = string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"));
-            return await _apiClient.GetAsync<IEnumerable<Alarm>>("/api/alarms/history?" + queryString);
+            return await _apiClient.GetAsync<IEnumerable<Alarm>>("/api/alarms/history?" + queryString) ?? Enumerable.Empty<Alarm>();
         }
         catch
         {
@@ -72,7 +72,7 @@ public class AlarmService : IAlarmService
     {
         try
         {
-            await _apiClient.PostAsync<object, object>($"/api/alarms/{alarmId}/acknowledge", null);
+            await _apiClient.PostAsync<object, object>($"/api/alarms/{alarmId}/acknowledge", new { });
             return true;
         }
         catch

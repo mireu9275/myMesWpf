@@ -42,7 +42,8 @@ public class AuthService : IAuthService
 
                 _currentUser = new User
                 {
-                    Id = userId,
+                    Id = DateTime.Now.Ticks,
+                    UserId = userId,
                     UserName = userId == "admin" ? "관리자" : "홍길동",
                     Role = userId == "admin" ? UserRole.Admin : UserRole.Operator,
                     Department = "생산팀",

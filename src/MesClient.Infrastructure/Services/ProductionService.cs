@@ -26,6 +26,8 @@ public class ProductionService : IProductionService
         try
         {
             var result = await _apiClient.PostAsync<ProductionInput, Production>("/api/production", input);
+            if (result == null)
+                throw new InvalidOperationException("API 응답이 null입니다.");
             
             // 로컬 이벤트 발생 (데모)
             ProductionRecorded?.Invoke(this, result);
@@ -72,7 +74,7 @@ public class ProductionService : IProductionService
         try
         {
             var queryString = string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"));
-            return await _apiClient.GetAsync<IEnumerable<Production>>("/api/production/history?" + queryString);
+            return await _apiClient.GetAsync<IEnumerable<Production>>("/api/production/history?" + queryString) ?? Enumerable.Empty<Production>();
         }
         catch
         {
@@ -88,7 +90,10 @@ public class ProductionService : IProductionService
             if (!string.IsNullOrEmpty(lineCode))
                 url += $"?lineCode={lineCode}";
                 
-            return await _apiClient.GetAsync<DailyProductionSummary>(url);
+            var result = await _apiClient.GetAsync<DailyProductionSummary>(url);
+            if (result == null)
+                throw new InvalidOperationException("API 응답이 null입니다.");
+            return result;
         }
         catch
         {
