@@ -21,7 +21,7 @@ public class QualityService : IQualityService
     {
         try
         {
-            return await _apiClient.PostAsync<QualityInspection>("/api/quality/inspections", input);
+            return await _apiClient.PostAsync<QualityInspectionInput, QualityInspection>("/api/quality/inspections", input);
         }
         catch
         {
