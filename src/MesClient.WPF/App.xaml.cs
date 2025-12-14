@@ -53,6 +53,9 @@ public partial class App : Application
         services.AddSingleton<IAuthService, AuthService>();
         services.AddSingleton<IWorkOrderService, WorkOrderService>();
         services.AddSingleton<IEquipmentService, EquipmentService>();
+        services.AddSingleton<IAlarmService, AlarmService>();
+        services.AddSingleton<IProductionService, ProductionService>();
+        services.AddSingleton<IQualityService, QualityService>();
 
         // WPF Services
         services.AddSingleton<INavigationService, NavigationService>();
