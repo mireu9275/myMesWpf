@@ -1,0 +1,16 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:MesClient.WPF.Converters">
+
+    <!-- 공통 컨버터 -->
+    <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <converters:InverseBooleanConverter x:Key="InverseBoolConverter" />
+    <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+    <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    <converters:EquipmentStatusToColorConverter x:Key="EquipmentStatusToColorConverter" />
+    <converters:WorkOrderStatusToColorConverter x:Key="WorkOrderStatusToColorConverter" />
+    <converters:PercentageConverter x:Key="PercentageConverter" />
+    <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter" />
+    <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+
+</ResourceDictionary>

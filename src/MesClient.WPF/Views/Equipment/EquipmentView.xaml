@@ -1,0 +1,179 @@
+<UserControl x:Class="MesClient.WPF.Views.EquipmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 페이지 헤더 -->
+        <TextBlock Text="설비관리" Style="{StaticResource PageTitle}" Grid.Row="0" />
+
+        <!-- 상태 요약 카드 -->
+        <WrapPanel Grid.Row="1" Margin="0,0,0,16">
+            <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="150">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource StatusIndicator}" Background="{StaticResource RunningBrush}" />
+                        <TextBlock Text="가동중" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding RunningCount}" 
+                               FontSize="28" FontWeight="Bold" 
+                               Foreground="{StaticResource RunningBrush}"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="150">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource StatusIndicator}" Background="{StaticResource IdleBrush}" />
+                        <TextBlock Text="대기중" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding IdleCount}" 
+                               FontSize="28" FontWeight="Bold" 
+                               Foreground="{StaticResource IdleBrush}"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="150">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource StatusIndicator}" Background="{StaticResource DownBrush}" />
+                        <TextBlock Text="고장" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding DownCount}" 
+                               FontSize="28" FontWeight="Bold" 
+                               Foreground="{StaticResource DownBrush}"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="150">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource StatusIndicator}" Background="{StaticResource MaintenanceBrush}" />
+                        <TextBlock Text="정비중" />
+                    </StackPanel>
+                    <TextBlock Text="{Binding MaintenanceCount}" 
+                               FontSize="28" FontWeight="Bold" 
+                               Foreground="{StaticResource MaintenanceBrush}"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </materialDesign:Card>
+        </WrapPanel>
+
+        <!-- 검색 조건 -->
+        <materialDesign:Card Grid.Row="2" Padding="16" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Width="150"
+                          ItemsSource="{Binding LineCodes}"
+                          SelectedItem="{Binding SelectedLineCode}"
+                          materialDesign:HintAssist.Hint="라인 선택"
+                          Margin="0,0,16,0" />
+
+                <ComboBox Width="150"
+                          SelectedItem="{Binding SelectedStatus}"
+                          materialDesign:HintAssist.Hint="상태 선택"
+                          Margin="0,0,16,0">
+                    <ComboBoxItem Content="전체" />
+                    <ComboBoxItem Content="가동중" />
+                    <ComboBoxItem Content="대기중" />
+                    <ComboBoxItem Content="고장" />
+                    <ComboBoxItem Content="정비중" />
+                </ComboBox>
+
+                <TextBox Style="{StaticResource SearchTextBox}"
+                         Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,16,0" />
+
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="초기화"
+                        Command="{Binding ClearFiltersCommand}" />
+            </StackPanel>
+        </materialDesign:Card>
+
+        <!-- 설비 목록 -->
+        <materialDesign:Card Grid.Row="3" Padding="16">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                    <TextBlock Text="설비 목록" Style="{StaticResource SectionTitle}" DockPanel.Dock="Left" />
+                    
+                    <!-- 상태 변경 버튼 -->
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"
+                                Visibility="{Binding SelectedEquipment, Converter={StaticResource NullToVisibilityConverter}}">
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Content="가동"
+                                Command="{Binding ChangeStatusCommand}"
+                                CommandParameter="Running"
+                                Margin="0,0,8,0" />
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Content="대기"
+                                Command="{Binding ChangeStatusCommand}"
+                                CommandParameter="Idle"
+                                Margin="0,0,8,0" />
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Content="정비"
+                                Command="{Binding ChangeStatusCommand}"
+                                CommandParameter="Maintenance"
+                                Foreground="{StaticResource WarningBrush}" />
+                    </StackPanel>
+                    <Border />
+                </DockPanel>
+
+                <DataGrid Grid.Row="1"
+                          ItemsSource="{Binding Equipments}"
+                          SelectedItem="{Binding SelectedEquipment}"
+                          Style="{StaticResource MesDataGrid}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="상태" Width="60">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource StatusIndicator}"
+                                            Background="{Binding Status, Converter={StaticResource EquipmentStatusToColorConverter}}"
+                                            Width="24" Height="24"
+                                            CornerRadius="12" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="설비코드" Binding="{Binding EquipmentCode}" Width="120" />
+                        <DataGridTextColumn Header="설비명" Binding="{Binding EquipmentName}" Width="*" />
+                        <DataGridTextColumn Header="라인" Binding="{Binding LineName}" Width="100" />
+                        <DataGridTextColumn Header="공정" Binding="{Binding ProcessName}" Width="100" />
+                        <DataGridTextColumn Header="현재 작업" Binding="{Binding CurrentWorkOrderNo}" Width="130" />
+                        <DataGridTextColumn Header="작업자" Binding="{Binding OperatorName}" Width="100" />
+                        <DataGridTemplateColumn Header="가동률" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding UtilizationRate, StringFormat={}{0:F1}%}" 
+                                                   HorizontalAlignment="Center" />
+                                        <ProgressBar Value="{Binding UtilizationRate}" 
+                                                     Maximum="100" 
+                                                     Height="4" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="마지막 정비" Binding="{Binding LastMaintenanceDate, StringFormat=yyyy-MM-dd}" Width="100" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>
