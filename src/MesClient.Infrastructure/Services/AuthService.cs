@@ -1,3 +1,4 @@
+using MesClient.Core.Enums;
 using MesClient.Core.Interfaces;
 using MesClient.Core.Models;
 using MesClient.Infrastructure.Api;
@@ -32,6 +33,44 @@ public class AuthService : IAuthService
         try
         {
             _logger.Information("로그인 시도: {UserId}", userId);
+
+            // TODO: 실제 서버 연결 시 이 부분을 제거하고 아래 주석 처리된 API 호출 코드를 사용하세요.
+            // Mock Login (개발용)
+            if (!string.IsNullOrEmpty(userId))
+            {
+                await Task.Delay(500); // 네트워크 딜레이 시뮬레이션
+
+                _currentUser = new User
+                {
+                    Id = userId,
+                    UserName = userId == "admin" ? "관리자" : "홍길동",
+                    Role = userId == "admin" ? UserRole.Admin : UserRole.Operator,
+                    Department = "생산팀",
+                    Email = $"{userId}@example.com",
+                    CreatedAt = DateTime.Now
+                };
+                _accessToken = "mock-access-token";
+                _refreshToken = "mock-refresh-token";
+                
+                _apiClient.SetAccessToken(_accessToken);
+                
+                _logger.Information("로그인 성공 (Mock): {UserId}", userId);
+                
+                AuthStateChanged?.Invoke(this, new AuthChangedEventArgs 
+                { 
+                    IsAuthenticated = true, 
+                    User = _currentUser 
+                });
+
+                return new AuthResult
+                {
+                    Success = true,
+                    User = _currentUser,
+                    Token = _accessToken,
+                    RefreshToken = _refreshToken,
+                    ExpiresAt = DateTime.Now.AddHours(1)
+                };
+            }
 
             var request = new { UserId = userId, Password = password };
             var response = await _apiClient.PostAsync<object, LoginResponse>("/api/auth/login", request);
@@ -83,7 +122,12 @@ public class AuthService : IAuthService
     {
         try
         {
-            if (IsAuthenticated)
+            // Mock Logout
+            if (_accessToken == "mock-access-token")
+            {
+                await Task.Delay(200);
+            }
+            else if (IsAuthenticated)
             {
                 await _apiClient.PostAsync<object, object>("/api/auth/logout", new { });
             }
