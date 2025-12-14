@@ -212,7 +212,7 @@
                                 <TextBlock VerticalAlignment="Center" 
                                            Margin="16,0"
                                            Foreground="{StaticResource TextSecondaryBrush}">
-                                    <Run Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
+                                    <Run Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{}{0:yyyy-MM-dd HH:mm}', Mode=OneWay}" />
                                 </TextBlock>
                             </StackPanel>
 
