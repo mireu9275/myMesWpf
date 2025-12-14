@@ -37,5 +37,6 @@ public interface INavigationService
 public class NavigationEventArgs : EventArgs
 {
     public string ViewName { get; set; } = string.Empty;
+    public object? ViewModel { get; set; }
     public object? Parameter { get; set; }
 }

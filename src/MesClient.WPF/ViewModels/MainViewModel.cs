@@ -82,6 +82,10 @@ public partial class MainViewModel : ViewModelBase
     private void OnNavigated(object? sender, NavigationEventArgs e)
     {
         CurrentViewName = e.ViewName;
+        if (e.ViewModel is ViewModelBase viewModel)
+        {
+            CurrentViewModel = viewModel;
+        }
     }
 
     private async Task LoadActiveAlarmsAsync()
