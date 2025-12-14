@@ -25,7 +25,7 @@ public class ProductionService : IProductionService
     {
         try
         {
-            var result = await _apiClient.PostAsync<Production>("/api/production", input);
+            var result = await _apiClient.PostAsync<ProductionInput, Production>("/api/production", input);
             
             // 로컬 이벤트 발생 (데모)
             ProductionRecorded?.Invoke(this, result);

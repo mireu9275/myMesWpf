@@ -72,7 +72,7 @@ public class AlarmService : IAlarmService
     {
         try
         {
-            await _apiClient.PostAsync<object>($"/api/alarms/{alarmId}/acknowledge", null);
+            await _apiClient.PostAsync<object, object>($"/api/alarms/{alarmId}/acknowledge", null);
             return true;
         }
         catch
@@ -86,7 +86,7 @@ public class AlarmService : IAlarmService
         try
         {
             var data = new { Action = action };
-            await _apiClient.PostAsync<object>($"/api/alarms/{alarmId}/clear", data);
+            await _apiClient.PostAsync<object, object>($"/api/alarms/{alarmId}/clear", data);
             
             // 로컬 이벤트 발생 (데모)
             var alarm = new Alarm { Id = alarmId, ClearedAt = DateTime.Now };
