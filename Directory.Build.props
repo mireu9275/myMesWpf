@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Authors>MES Development Team</Authors>
+    <Company>Your Company Name</Company>
+    <Product>MES Client</Product>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,232 @@
+<Window x:Class="MesClient.WPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewModels="clr-namespace:MesClient.WPF.ViewModels"
+        xmlns:views="clr-namespace:MesClient.WPF.Views"
+        mc:Ignorable="d"
+        Title="MES Client" 
+        Height="800" Width="1400"
+        MinHeight="600" MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Window.Resources>
+        <!-- ViewModel to View DataTemplates -->
+        <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
+            <views:LoginView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ProductionViewModel}">
+            <views:ProductionView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:EquipmentViewModel}">
+            <views:EquipmentView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:QualityViewModel}">
+            <views:QualityView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+            <views:SettingsView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <Grid>
+            <!-- 로그인 전 -->
+            <ContentControl Content="{Binding CurrentViewModel}"
+                            Visibility="{Binding IsLoggedIn, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+
+            <!-- 로그인 후 -->
+            <Grid Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- 사이드 네비게이션 -->
+                <materialDesign:Card Grid.Column="0" 
+                                     UniformCornerRadius="0"
+                                     materialDesign:ElevationAssist.Elevation="Dp4"
+                                     Width="{Binding IsMenuExpanded, Converter={x:Static views:MainWindow.MenuWidthConverter}}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!-- 로고/타이틀 -->
+                        <Border Grid.Row="0" 
+                                Background="{StaticResource PrimaryBrush}" 
+                                Padding="16">
+                            <StackPanel>
+                                <TextBlock Text="MES Client" 
+                                           FontSize="20" 
+                                           FontWeight="Bold" 
+                                           Foreground="White"
+                                           Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <TextBlock Text="Manufacturing Execution System" 
+                                           FontSize="11" 
+                                           Foreground="#B3FFFFFF"
+                                           Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 네비게이션 메뉴 -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="0,8">
+                                <Button Style="{StaticResource NavButton}"
+                                        Command="{Binding NavigateToCommand}"
+                                        CommandParameter="Dashboard">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="ViewDashboard" Width="24" Height="24" VerticalAlignment="Center" />
+                                        <TextBlock Text="대시보드" Margin="16,0,0,0" VerticalAlignment="Center"
+                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Style="{StaticResource NavButton}"
+                                        Command="{Binding NavigateToCommand}"
+                                        CommandParameter="Production">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Factory" Width="24" Height="24" VerticalAlignment="Center" />
+                                        <TextBlock Text="생산관리" Margin="16,0,0,0" VerticalAlignment="Center"
+                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Style="{StaticResource NavButton}"
+                                        Command="{Binding NavigateToCommand}"
+                                        CommandParameter="Equipment">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Cog" Width="24" Height="24" VerticalAlignment="Center" />
+                                        <TextBlock Text="설비관리" Margin="16,0,0,0" VerticalAlignment="Center"
+                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Style="{StaticResource NavButton}"
+                                        Command="{Binding NavigateToCommand}"
+                                        CommandParameter="Quality">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="CheckCircle" Width="24" Height="24" VerticalAlignment="Center" />
+                                        <TextBlock Text="품질관리" Margin="16,0,0,0" VerticalAlignment="Center"
+                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Separator Margin="16,8" />
+
+                                <Button Style="{StaticResource NavButton}"
+                                        Command="{Binding NavigateToCommand}"
+                                        CommandParameter="Settings">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Settings" Width="24" Height="24" VerticalAlignment="Center" />
+                                        <TextBlock Text="설정" Margin="16,0,0,0" VerticalAlignment="Center"
+                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- 사용자 정보 및 로그아웃 -->
+                        <Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}">
+                            <StackPanel Margin="8">
+                                <Button Style="{StaticResource NavButton}" 
+                                        Command="{Binding ShowProfileCommand}"
+                                        Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Account" Width="24" Height="24" VerticalAlignment="Center" />
+                                        <StackPanel Margin="16,0,0,0">
+                                            <TextBlock Text="{Binding CurrentUser.UserName}" FontWeight="Medium" />
+                                            <TextBlock Text="{Binding CurrentUser.Department}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Style="{StaticResource NavButton}"
+                                        Command="{Binding LogoutCommand}"
+                                        Foreground="{StaticResource ErrorBrush}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Logout" Width="24" Height="24" VerticalAlignment="Center" />
+                                        <TextBlock Text="로그아웃" Margin="16,0,0,0" VerticalAlignment="Center"
+                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- 메인 컨텐츠 영역 -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- 상단 툴바 -->
+                    <materialDesign:Card Grid.Row="0" 
+                                         UniformCornerRadius="0"
+                                         Padding="8,4">
+                        <DockPanel>
+                            <!-- 메뉴 토글 -->
+                            <Button DockPanel.Dock="Left"
+                                    Style="{StaticResource MaterialDesignIconButton}"
+                                    Command="{Binding ToggleMenuCommand}">
+                                <materialDesign:PackIcon Kind="Menu" />
+                            </Button>
+
+                            <!-- 현재 페이지 타이틀 -->
+                            <TextBlock DockPanel.Dock="Left" 
+                                       Text="{Binding CurrentViewName}" 
+                                       FontSize="18" 
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"
+                                       Margin="16,0" />
+
+                            <!-- 우측 아이콘들 -->
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                <!-- 알람 -->
+                                <Button Style="{StaticResource MaterialDesignIconButton}"
+                                        Command="{Binding ShowAlarmsCommand}">
+                                    <materialDesign:Badged Badge="{Binding ActiveAlarmCount}"
+                                                           BadgeColorZoneMode="PrimaryDark">
+                                        <materialDesign:PackIcon Kind="Bell" />
+                                    </materialDesign:Badged>
+                                </Button>
+
+                                <!-- 현재 시간 -->
+                                <TextBlock VerticalAlignment="Center" 
+                                           Margin="16,0"
+                                           Foreground="{StaticResource TextSecondaryBrush}">
+                                    <Run Text="{Binding Source={x:Static System:DateTime.Now}, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
+                                </TextBlock>
+                            </StackPanel>
+
+                            <Border /> <!-- Spacer -->
+                        </DockPanel>
+                    </materialDesign:Card>
+
+                    <!-- 컨텐츠 -->
+                    <Border Grid.Row="1" 
+                            Background="{StaticResource BackgroundBrush}"
+                            Padding="16">
+                        <ContentControl Content="{Binding CurrentViewModel}" />
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

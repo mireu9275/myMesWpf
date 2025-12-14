@@ -1,0 +1,227 @@
+<UserControl x:Class="MesClient.WPF.Views.QualityView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 페이지 헤더 -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="품질관리" Style="{StaticResource PageTitle}" DockPanel.Dock="Left" />
+            <Button DockPanel.Dock="Right"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding NewInspectionCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Plus" VerticalAlignment="Center" />
+                    <TextBlock Text="검사 등록" Margin="8,0,0,0" />
+                </StackPanel>
+            </Button>
+            <Border />
+        </DockPanel>
+
+        <!-- 요약 카드 -->
+        <WrapPanel Grid.Row="1" Margin="0,0,0,16">
+            <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="180">
+                <StackPanel>
+                    <TextBlock Text="총 검사건수" Style="{StaticResource CardTitle}" />
+                    <TextBlock Text="{Binding Summary.TotalInspections, StringFormat=N0}" 
+                               FontSize="28" FontWeight="Bold" 
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="180">
+                <StackPanel>
+                    <TextBlock Text="합격" Style="{StaticResource CardTitle}" />
+                    <TextBlock Text="{Binding Summary.PassCount, StringFormat=N0}" 
+                               FontSize="28" FontWeight="Bold" 
+                               Foreground="{StaticResource SuccessBrush}"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="180">
+                <StackPanel>
+                    <TextBlock Text="불합격" Style="{StaticResource CardTitle}" />
+                    <TextBlock Text="{Binding Summary.FailCount, StringFormat=N0}" 
+                               FontSize="28" FontWeight="Bold" 
+                               Foreground="{StaticResource ErrorBrush}"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Padding="16" Margin="0,0,8,0" Width="180">
+                <StackPanel>
+                    <TextBlock Text="합격률" Style="{StaticResource CardTitle}" />
+                    <TextBlock FontSize="28" FontWeight="Bold" 
+                               Foreground="{StaticResource PrimaryBrush}"
+                               Margin="0,8,0,0">
+                        <Run Text="{Binding Summary.PassRate, StringFormat=F1}" />
+                        <Run Text="%" FontSize="16" />
+                    </TextBlock>
+                </StackPanel>
+            </materialDesign:Card>
+        </WrapPanel>
+
+        <!-- 검색 조건 -->
+        <materialDesign:Card Grid.Row="2" Padding="16" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="시작일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                    <DatePicker SelectedDate="{Binding FromDate}" Width="120" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="종료일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                    <DatePicker SelectedDate="{Binding ToDate}" Width="120" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="결과" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                    <ComboBox Width="120"
+                              SelectedItem="{Binding SelectedResult}"
+                              materialDesign:HintAssist.Hint="전체">
+                        <ComboBoxItem Content="전체" />
+                        <ComboBoxItem Content="합격" />
+                        <ComboBoxItem Content="불합격" />
+                        <ComboBoxItem Content="조건부합격" />
+                    </ComboBox>
+                </StackPanel>
+
+                <TextBox Style="{StaticResource SearchTextBox}"
+                         Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="LOT/제품명 검색"
+                         VerticalAlignment="Bottom"
+                         Margin="0,0,16,0" />
+
+                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                        Content="초기화"
+                        Command="{Binding ClearFiltersCommand}"
+                        VerticalAlignment="Bottom"
+                        Margin="0,0,8,0" />
+                        
+                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding SearchCommand}"
+                        VerticalAlignment="Bottom">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" />
+                        <TextBlock Text="조회" Margin="8,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <!-- 검사 이력 목록 -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="300" />
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:Card Grid.Column="0" Margin="0,0,8,0" Padding="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                        <TextBlock Text="검사 이력" Style="{StaticResource SectionTitle}" DockPanel.Dock="Left" />
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Content="Excel 내보내기"
+                                Command="{Binding ExportToExcelCommand}" />
+                        <Border />
+                    </DockPanel>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding Inspections}"
+                              SelectedItem="{Binding SelectedInspection}"
+                              Style="{StaticResource MesDataGrid}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="검사번호" Binding="{Binding InspectionNo}" Width="120" />
+                            <DataGridTextColumn Header="LOT" Binding="{Binding LotNo}" Width="120" />
+                            <DataGridTextColumn Header="제품명" Binding="{Binding ProductName}" Width="*" />
+                            <DataGridTextColumn Header="검사항목" Binding="{Binding InspectionItem}" Width="120" />
+                            <DataGridTextColumn Header="측정값" Binding="{Binding MeasuredValue}" Width="80" />
+                            <DataGridTextColumn Header="규격" Binding="{Binding Specification}" Width="100" />
+                            <DataGridTemplateColumn Header="결과" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="4" Padding="8,4">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Result}" Value="Pass">
+                                                            <Setter Property="Background" Value="{StaticResource SuccessBrush}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Result}" Value="Fail">
+                                                            <Setter Property="Background" Value="{StaticResource ErrorBrush}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Result}" Value="ConditionalPass">
+                                                            <Setter Property="Background" Value="{StaticResource WarningBrush}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding Result}" 
+                                                       Foreground="White" 
+                                                       FontSize="11"
+                                                       HorizontalAlignment="Center" />
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="검사자" Binding="{Binding InspectorName}" Width="80" />
+                            <DataGridTextColumn Header="검사시간" Binding="{Binding InspectionTime, StringFormat=MM-dd HH:mm}" Width="100" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- 불량 유형 통계 -->
+            <materialDesign:Card Grid.Column="1" Padding="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="불량 유형별 통계" Style="{StaticResource SectionTitle}" Grid.Row="0" />
+
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding DefectStatistics}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="0,0,0,1" 
+                                        BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                        Padding="8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding DefectCode}" Grid.Column="0" />
+                                        <TextBlock Text="{Binding Count, StringFormat=N0}" 
+                                                   Grid.Column="1"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource ErrorBrush}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </Grid>
+</UserControl>
