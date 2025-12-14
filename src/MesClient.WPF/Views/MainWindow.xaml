@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewModels="clr-namespace:MesClient.WPF.ViewModels"
         xmlns:views="clr-namespace:MesClient.WPF.Views"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MES Client" 
         Height="800" Width="1400"
@@ -211,7 +212,7 @@
                                 <TextBlock VerticalAlignment="Center" 
                                            Margin="16,0"
                                            Foreground="{StaticResource TextSecondaryBrush}">
-                                    <Run Text="{Binding Source={x:Static System:DateTime.Now}, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
+                                    <Run Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" />
                                 </TextBlock>
                             </StackPanel>
 
