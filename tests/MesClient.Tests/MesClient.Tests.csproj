@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\MesClient.Core\MesClient.Core.csproj" />
     <ProjectReference Include="..\..\src\MesClient.Infrastructure\MesClient.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\MesClient.WPF\MesClient.WPF.csproj" />
   </ItemGroup>
 
 </Project>
