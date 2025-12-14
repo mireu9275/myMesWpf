@@ -6,7 +6,6 @@
     <RootNamespace>MesClient.WPF</RootNamespace>
     <AssemblyName>MesClient</AssemblyName>
     <Description>MES Client WPF Application</Description>
-    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <StartupObject>MesClient.WPF.App</StartupObject>
   </PropertyGroup>
 
@@ -29,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\**\*" />
+    <!-- <Resource Include="Assets\**\*" /> -->
   </ItemGroup>
 
 </Project>

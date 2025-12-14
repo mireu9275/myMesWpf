@@ -46,7 +46,7 @@ public partial class Alarm : BaseEntity
     /// <summary>
     /// 활성 알람 여부
     /// </summary>
-    public bool IsActive => ClearedAt == null;
+    public new bool IsActive => ClearedAt == null;
 
     /// <summary>
     /// 확인된 알람 여부
