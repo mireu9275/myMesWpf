@@ -59,6 +59,8 @@
                 <materialDesign:Card Grid.Column="0" 
                                      UniformCornerRadius="0"
                                      materialDesign:ElevationAssist.Elevation="Dp4"
+                                     MinWidth="240"
+                                     MaxWidth="240"
                                      Width="{Binding IsMenuExpanded, Converter={x:Static views:MainWindow.MenuWidthConverter}}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -85,8 +87,11 @@
                         </Border>
 
                         <!-- 네비게이션 메뉴 -->
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer Grid.Row="1" 
+                                      VerticalScrollBarVisibility="Auto"
+                                      VerticalAlignment="Stretch">
                             <StackPanel Margin="0,8">
+                                <!-- 대시보드 -->
                                 <Button Style="{StaticResource NavButton}"
                                         Command="{Binding NavigateToCommand}"
                                         CommandParameter="Dashboard">
@@ -97,38 +102,57 @@
                                     </StackPanel>
                                 </Button>
 
-                                <Button Style="{StaticResource NavButton}"
-                                        Command="{Binding NavigateToCommand}"
-                                        CommandParameter="Production">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Factory" Width="24" Height="24" VerticalAlignment="Center" />
-                                        <TextBlock Text="생산관리" Margin="16,0,0,0" VerticalAlignment="Center"
-                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                    </StackPanel>
-                                </Button>
+                                <!-- 메뉴 그룹들 -->
+                                <ItemsControl ItemsSource="{Binding MenuGroups}"
+                                              Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Expander IsExpanded="{Binding IsExpanded}"
+                                                      Margin="0,4">
+                                                <Expander.Header>
+                                                    <Button Style="{StaticResource NavButton}"
+                                                            HorizontalContentAlignment="Left"
+                                                            Command="{Binding DataContext.NavigateToGroupCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            CommandParameter="{Binding}">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <materialDesign:PackIcon Kind="{Binding Icon}" Width="24" Height="24" VerticalAlignment="Center" />
+                                                            <TextBlock Text="{Binding Title}" Margin="16,0,0,0" VerticalAlignment="Center" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Expander.Header>
+                                                <ItemsControl ItemsSource="{Binding Items}" Margin="24,0,0,0">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Button HorizontalContentAlignment="Left"
+                                                                    Command="{Binding DataContext.NavigateToCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                    CommandParameter="{Binding ViewName}">
+                                                                <Button.Style>
+                                                                    <Style TargetType="Button" BasedOn="{StaticResource NavButton}">
+                                                                        <Setter Property="Background" Value="Transparent" />
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                                <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+                                                                                <Setter Property="Foreground" Value="White" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Button.Style>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <materialDesign:PackIcon Kind="{Binding Icon}" Width="20" Height="20" VerticalAlignment="Center" />
+                                                                    <TextBlock Text="{Binding Title}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </Expander>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
 
-                                <Button Style="{StaticResource NavButton}"
-                                        Command="{Binding NavigateToCommand}"
-                                        CommandParameter="Equipment">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Cog" Width="24" Height="24" VerticalAlignment="Center" />
-                                        <TextBlock Text="설비관리" Margin="16,0,0,0" VerticalAlignment="Center"
-                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                    </StackPanel>
-                                </Button>
+                                <Separator Margin="16,8" Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-                                <Button Style="{StaticResource NavButton}"
-                                        Command="{Binding NavigateToCommand}"
-                                        CommandParameter="Quality">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="CheckCircle" Width="24" Height="24" VerticalAlignment="Center" />
-                                        <TextBlock Text="품질관리" Margin="16,0,0,0" VerticalAlignment="Center"
-                                                   Visibility="{Binding IsMenuExpanded, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                    </StackPanel>
-                                </Button>
-
-                                <Separator Margin="16,8" />
-
+                                <!-- 설정 -->
                                 <Button Style="{StaticResource NavButton}"
                                         Command="{Binding NavigateToCommand}"
                                         CommandParameter="Settings">

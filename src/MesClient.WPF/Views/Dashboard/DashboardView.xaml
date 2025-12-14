@@ -154,9 +154,9 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel>
-                                            <TextBlock Text="{Binding ProgressRate, StringFormat={}{0:F1}%}" 
+                                            <TextBlock Text="{Binding ProgressRate, StringFormat={}{0:F1}%, Mode=OneWay}" 
                                                        HorizontalAlignment="Center" />
-                                            <ProgressBar Value="{Binding ProgressRate}" 
+                                            <ProgressBar Value="{Binding ProgressRate, Mode=OneWay}" 
                                                          Maximum="100" 
                                                          Height="4" />
                                         </StackPanel>

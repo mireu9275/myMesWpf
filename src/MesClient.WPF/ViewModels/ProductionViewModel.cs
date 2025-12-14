@@ -50,6 +50,10 @@ public partial class ProductionViewModel : ViewModelBase
     [ObservableProperty]
     private DailyProductionSummary? _summary;
 
+    // 전체보기 모드
+    [ObservableProperty]
+    private bool _isFullViewMode;
+
     public ProductionViewModel(
         IWorkOrderService workOrderService,
         IProductionService productionService,
@@ -66,8 +70,15 @@ public partial class ProductionViewModel : ViewModelBase
 
     public override async Task InitializeAsync()
     {
-        await LoadLineCodesAsync();
-        await SearchAsync();
+        try
+        {
+            await LoadLineCodesAsync();
+            await SearchAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Production 초기화 오류: {ex.Message}");
+        }
     }
 
     private async Task LoadLineCodesAsync()
@@ -199,6 +210,12 @@ public partial class ProductionViewModel : ViewModelBase
         SelectedStatus = null;
         SelectedLineCode = null;
         SearchKeyword = string.Empty;
+    }
+
+    [RelayCommand]
+    private void ToggleFullView()
+    {
+        IsFullViewMode = !IsFullViewMode;
     }
 
     partial void OnSelectedWorkOrderChanged(WorkOrder? value)

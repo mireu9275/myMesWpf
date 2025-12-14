@@ -33,7 +33,8 @@ public class NavigationService : INavigationService
             _navigationStack.Push(viewName);
             _currentView = viewName;
 
-            _ = viewModel.InitializeAsync();
+            // 예외 처리와 함께 초기화 (UI 스레드에서 실행)
+            _ = InitializeViewModelAsync(viewModel, viewName);
 
             Navigated?.Invoke(this, new NavigationEventArgs 
             { 
@@ -69,5 +70,18 @@ public class NavigationService : INavigationService
             "Settings" => _serviceProvider.GetService<SettingsViewModel>(),
             _ => _serviceProvider.GetService<DashboardViewModel>()
         };
+    }
+
+    private async Task InitializeViewModelAsync(ViewModelBase viewModel, string viewName)
+    {
+        try
+        {
+            await viewModel.InitializeAsync();
+        }
+        catch (Exception ex)
+        {
+            // 로그 기록 (필요시)
+            System.Diagnostics.Debug.WriteLine($"ViewModel 초기화 오류: {viewName}, {ex.Message}");
+        }
     }
 }

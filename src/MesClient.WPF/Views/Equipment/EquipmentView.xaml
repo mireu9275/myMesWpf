@@ -138,7 +138,21 @@
                     <Border />
                 </DockPanel>
 
-                <DataGrid Grid.Row="1"
+                <!-- 전체보기 버튼 -->
+                <DockPanel Grid.Row="1" Margin="0,0,0,8">
+                    <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Command="{Binding ToggleFullViewCommand}"
+                            DockPanel.Dock="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="{Binding IsFullViewMode, Converter={StaticResource BoolToIconConverter}}" 
+                                                     VerticalAlignment="Center" Margin="0,0,4,0" />
+                            <TextBlock Text="{Binding IsFullViewMode, Converter={StaticResource BoolToTextConverter}}" />
+                        </StackPanel>
+                    </Button>
+                    <Border />
+                </DockPanel>
+
+                <DataGrid Grid.Row="2"
                           ItemsSource="{Binding Equipments}"
                           SelectedItem="{Binding SelectedEquipment}"
                           Style="{StaticResource MesDataGrid}">

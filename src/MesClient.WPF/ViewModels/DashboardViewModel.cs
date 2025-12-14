@@ -16,8 +16,6 @@ public partial class DashboardViewModel : ViewModelBase
     private readonly IProductionService _productionService;
     private readonly IAlarmService _alarmService;
 
-    private System.Timers.Timer? _refreshTimer;
-
     // KPI 데이터
     [ObservableProperty]
     private int _todayPlanQuantity;
@@ -76,28 +74,15 @@ public partial class DashboardViewModel : ViewModelBase
 
     public override async Task InitializeAsync()
     {
-        await RefreshDataAsync();
-        StartAutoRefresh();
-    }
-
-    public override Task CleanupAsync()
-    {
-        StopAutoRefresh();
-        return Task.CompletedTask;
-    }
-
-    private void StartAutoRefresh()
-    {
-        _refreshTimer = new System.Timers.Timer(10000); // 10초마다
-        _refreshTimer.Elapsed += async (s, e) => await RefreshDataAsync();
-        _refreshTimer.Start();
-    }
-
-    private void StopAutoRefresh()
-    {
-        _refreshTimer?.Stop();
-        _refreshTimer?.Dispose();
-        _refreshTimer = null;
+        try
+        {
+            await RefreshDataAsync();
+        }
+        catch (Exception ex)
+        {
+            // 예외 발생 시에도 앱이 크래시되지 않도록 처리
+            System.Diagnostics.Debug.WriteLine($"Dashboard 초기화 오류: {ex.Message}");
+        }
     }
 
     [RelayCommand]

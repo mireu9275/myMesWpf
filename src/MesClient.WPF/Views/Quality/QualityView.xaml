@@ -11,7 +11,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -73,64 +72,75 @@
             </materialDesign:Card>
         </WrapPanel>
 
-        <!-- 검색 조건 -->
-        <materialDesign:Card Grid.Row="2" Padding="16" Margin="0,0,0,16">
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Margin="0,0,16,0">
-                    <TextBlock Text="시작일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
-                    <DatePicker SelectedDate="{Binding FromDate}" Width="120" />
-                </StackPanel>
-
-                <StackPanel Margin="0,0,16,0">
-                    <TextBlock Text="종료일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
-                    <DatePicker SelectedDate="{Binding ToDate}" Width="120" />
-                </StackPanel>
-
-                <StackPanel Margin="0,0,16,0">
-                    <TextBlock Text="결과" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
-                    <ComboBox Width="120"
-                              SelectedItem="{Binding SelectedResult}"
-                              materialDesign:HintAssist.Hint="전체">
-                        <ComboBoxItem Content="전체" />
-                        <ComboBoxItem Content="합격" />
-                        <ComboBoxItem Content="불합격" />
-                        <ComboBoxItem Content="조건부합격" />
-                    </ComboBox>
-                </StackPanel>
-
-                <TextBox Style="{StaticResource SearchTextBox}"
-                         Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="LOT/제품명 검색"
-                         VerticalAlignment="Bottom"
-                         Margin="0,0,16,0" />
-
-                <Button Style="{StaticResource MaterialDesignFlatButton}"
-                        Content="초기화"
-                        Command="{Binding ClearFiltersCommand}"
-                        VerticalAlignment="Bottom"
-                        Margin="0,0,8,0" />
-                        
-                <Button Style="{StaticResource MaterialDesignRaisedButton}"
-                        Command="{Binding SearchCommand}"
-                        VerticalAlignment="Bottom">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" />
-                        <TextBlock Text="조회" Margin="8,0,0,0" />
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-        </materialDesign:Card>
-
         <!-- 검사 이력 목록 -->
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="300" />
             </Grid.ColumnDefinitions>
 
-            <materialDesign:Card Grid.Column="0" Margin="0,0,8,0" Padding="16">
+            <!-- 검색 조건 -->
+            <materialDesign:Card Grid.Row="0" 
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="{Binding IsFullViewMode, Converter={StaticResource BoolToColumnSpanConverter}}"
+                                 Padding="16" Margin="0,0,0,16">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Margin="0,0,16,0">
+                        <TextBlock Text="시작일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <DatePicker SelectedDate="{Binding FromDate}" Width="120" />
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,16,0">
+                        <TextBlock Text="종료일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <DatePicker SelectedDate="{Binding ToDate}" Width="120" />
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,16,0">
+                        <TextBlock Text="결과" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <ComboBox Width="120"
+                                  SelectedItem="{Binding SelectedResult}"
+                                  materialDesign:HintAssist.Hint="전체">
+                            <ComboBoxItem Content="전체" />
+                            <ComboBoxItem Content="합격" />
+                            <ComboBoxItem Content="불합격" />
+                            <ComboBoxItem Content="조건부합격" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <TextBox Style="{StaticResource SearchTextBox}"
+                             Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                             materialDesign:HintAssist.Hint="LOT/제품명 검색"
+                             VerticalAlignment="Bottom"
+                             Margin="0,0,16,0" />
+
+                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                            Content="초기화"
+                            Command="{Binding ClearFiltersCommand}"
+                            VerticalAlignment="Bottom"
+                            Margin="0,0,8,0" />
+                            
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding SearchCommand}"
+                            VerticalAlignment="Bottom">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" />
+                            <TextBlock Text="조회" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Grid.Row="1"
+                                 Grid.Column="0" 
+                                 Grid.ColumnSpan="{Binding IsFullViewMode, Converter={StaticResource BoolToColumnSpanConverter}}"
+                                 Margin="0,0,8,0" Padding="16">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
@@ -144,7 +154,21 @@
                         <Border />
                     </DockPanel>
 
-                    <DataGrid Grid.Row="1"
+                    <!-- 전체보기 버튼 -->
+                    <DockPanel Grid.Row="1" Margin="0,0,0,8">
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Command="{Binding ToggleFullViewCommand}"
+                                DockPanel.Dock="Right">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="{Binding IsFullViewMode, Converter={StaticResource BoolToIconConverter}}" 
+                                                         VerticalAlignment="Center" Margin="0,0,4,0" />
+                                <TextBlock Text="{Binding IsFullViewMode, Converter={StaticResource BoolToTextConverter}}" />
+                            </StackPanel>
+                        </Button>
+                        <Border />
+                    </DockPanel>
+
+                    <DataGrid Grid.Row="2"
                               ItemsSource="{Binding Inspections}"
                               SelectedItem="{Binding SelectedInspection}"
                               Style="{StaticResource MesDataGrid}">
@@ -190,7 +214,10 @@
             </materialDesign:Card>
 
             <!-- 불량 유형 통계 -->
-            <materialDesign:Card Grid.Column="1" Padding="16">
+            <materialDesign:Card Grid.Row="1"
+                                 Grid.Column="1" 
+                                 Padding="16"
+                                 Visibility="{Binding IsFullViewMode, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using MesClient.Core.Enums;
+using MaterialDesignThemes.Wpf;
 
 namespace MesClient.WPF.Converters;
 
@@ -229,6 +230,66 @@ public class EquipmentStatusToStringConverter : IValueConverter
         }
         
         return "전체";
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
+/// Boolean -> Icon (Fullscreen/FullscreenExit) 컨버터
+/// </summary>
+public class BoolToIconConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is bool isFullView && isFullView)
+        {
+            return PackIconKind.FullscreenExit;
+        }
+        return PackIconKind.Fullscreen;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
+/// Boolean -> Text (전체보기/되돌리기) 컨버터
+/// </summary>
+public class BoolToTextConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is bool isFullView && isFullView)
+        {
+            return "되돌리기";
+        }
+        return "전체보기";
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
+/// Boolean -> ColumnSpan 컨버터 (True일 때 2, False일 때 1)
+/// </summary>
+public class BoolToColumnSpanConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is bool isFullView && isFullView)
+        {
+            return 2;
+        }
+        return 1;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

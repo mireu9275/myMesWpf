@@ -33,6 +33,10 @@ public partial class QualityViewModel : ViewModelBase
     [ObservableProperty]
     private QualityInspection? _selectedInspection;
 
+    // 전체보기 모드
+    [ObservableProperty]
+    private bool _isFullViewMode;
+
     [ObservableProperty]
     private QualitySummary? _summary;
 
@@ -59,7 +63,14 @@ public partial class QualityViewModel : ViewModelBase
 
     public override async Task InitializeAsync()
     {
-        await SearchAsync();
+        try
+        {
+            await SearchAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Quality 초기화 오류: {ex.Message}");
+        }
     }
 
     [RelayCommand]
@@ -117,6 +128,12 @@ public partial class QualityViewModel : ViewModelBase
     private void ExportToExcel()
     {
         // TODO: Excel 내보내기
+    }
+
+    [RelayCommand]
+    private void ToggleFullView()
+    {
+        IsFullViewMode = !IsFullViewMode;
     }
 
     [RelayCommand]

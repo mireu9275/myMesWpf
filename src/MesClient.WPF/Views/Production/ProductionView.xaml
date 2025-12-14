@@ -10,93 +10,102 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- 페이지 헤더 -->
         <TextBlock Text="생산관리" Style="{StaticResource PageTitle}" Grid.Row="0" />
 
-        <!-- 검색 조건 -->
-        <materialDesign:Card Grid.Row="1" Padding="16" Margin="0,0,0,16">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <!-- 기간 -->
-                <StackPanel Grid.Column="0" Margin="0,0,16,0">
-                    <TextBlock Text="시작일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
-                    <DatePicker SelectedDate="{Binding FromDate}" Width="120" />
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" Margin="0,0,16,0">
-                    <TextBlock Text="종료일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
-                    <DatePicker SelectedDate="{Binding ToDate}" Width="120" />
-                </StackPanel>
-
-                <!-- 상태 -->
-                <StackPanel Grid.Column="2" Margin="0,0,16,0">
-                    <TextBlock Text="상태" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
-                    <ComboBox Width="120"
-                              SelectedItem="{Binding SelectedStatus}"
-                              materialDesign:HintAssist.Hint="전체">
-                        <ComboBoxItem Content="전체" />
-                        <ComboBoxItem Content="계획" />
-                        <ComboBoxItem Content="대기" />
-                        <ComboBoxItem Content="진행중" />
-                        <ComboBoxItem Content="완료" />
-                    </ComboBox>
-                </StackPanel>
-
-                <!-- 라인 -->
-                <StackPanel Grid.Column="3" Margin="0,0,16,0">
-                    <TextBlock Text="라인" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
-                    <ComboBox Width="120"
-                              ItemsSource="{Binding LineCodes}"
-                              SelectedItem="{Binding SelectedLineCode}"
-                              materialDesign:HintAssist.Hint="전체" />
-                </StackPanel>
-
-                <!-- 검색어 -->
-                <StackPanel Grid.Column="4">
-                    <TextBlock Text="검색" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
-                    <TextBox Style="{StaticResource SearchTextBox}"
-                             Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-
-                <!-- 버튼들 -->
-                <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Bottom">
-                    <Button Style="{StaticResource MaterialDesignFlatButton}"
-                            Content="초기화"
-                            Command="{Binding ClearFiltersCommand}"
-                            Margin="0,0,8,0" />
-                    <Button Style="{StaticResource MaterialDesignRaisedButton}"
-                            Command="{Binding SearchCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" />
-                            <TextBlock Text="조회" Margin="8,0,0,0" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </Grid>
-        </materialDesign:Card>
-
         <!-- 메인 컨텐츠 -->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="400" />
             </Grid.ColumnDefinitions>
 
+            <!-- 검색 조건 -->
+            <materialDesign:Card Grid.Row="0" 
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="{Binding IsFullViewMode, Converter={StaticResource BoolToColumnSpanConverter}}"
+                                 Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 기간 -->
+                    <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                        <TextBlock Text="시작일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <DatePicker SelectedDate="{Binding FromDate}" Width="120" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                        <TextBlock Text="종료일" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <DatePicker SelectedDate="{Binding ToDate}" Width="120" />
+                    </StackPanel>
+
+                    <!-- 상태 -->
+                    <StackPanel Grid.Column="2" Margin="0,0,16,0">
+                        <TextBlock Text="상태" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <ComboBox Width="120"
+                                  SelectedItem="{Binding SelectedStatus}"
+                                  materialDesign:HintAssist.Hint="전체">
+                            <ComboBoxItem Content="전체" />
+                            <ComboBoxItem Content="계획" />
+                            <ComboBoxItem Content="대기" />
+                            <ComboBoxItem Content="진행중" />
+                            <ComboBoxItem Content="완료" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- 라인 -->
+                    <StackPanel Grid.Column="3" Margin="0,0,16,0">
+                        <TextBlock Text="라인" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <ComboBox Width="120"
+                                  ItemsSource="{Binding LineCodes}"
+                                  SelectedItem="{Binding SelectedLineCode}"
+                                  materialDesign:HintAssist.Hint="전체" />
+                    </StackPanel>
+
+                    <!-- 검색어 -->
+                    <StackPanel Grid.Column="4">
+                        <TextBlock Text="검색" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <TextBox Style="{StaticResource SearchTextBox}"
+                                 Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+
+                    <!-- 버튼들 -->
+                    <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                Content="초기화"
+                                Command="{Binding ClearFiltersCommand}"
+                                Margin="0,0,8,0" />
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                Command="{Binding SearchCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Magnify" VerticalAlignment="Center" />
+                                <TextBlock Text="조회" Margin="8,0,0,0" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+
             <!-- 작업지시 목록 -->
-            <materialDesign:Card Grid.Column="0" Margin="0,0,8,0" Padding="16">
+            <materialDesign:Card Grid.Row="1"
+                                 Grid.Column="0" 
+                                 Grid.ColumnSpan="{Binding IsFullViewMode, Converter={StaticResource BoolToColumnSpanConverter}}"
+                                 Margin="0,0,8,0" Padding="16">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -124,8 +133,23 @@
                         <Border />
                     </DockPanel>
 
+                    <!-- 그리드 헤더 -->
+                    <DockPanel Grid.Row="1" Margin="0,0,0,8">
+                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Command="{Binding ToggleFullViewCommand}"
+                                DockPanel.Dock="Right"
+                                Margin="0,0,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="{Binding IsFullViewMode, Converter={StaticResource BoolToIconConverter}}" 
+                                                         VerticalAlignment="Center" Margin="0,0,4,0" />
+                                <TextBlock Text="{Binding IsFullViewMode, Converter={StaticResource BoolToTextConverter}}" />
+                            </StackPanel>
+                        </Button>
+                        <Border />
+                    </DockPanel>
+
                     <!-- 그리드 -->
-                    <DataGrid Grid.Row="1"
+                    <DataGrid Grid.Row="2"
                               ItemsSource="{Binding WorkOrders}"
                               SelectedItem="{Binding SelectedWorkOrder}"
                               Style="{StaticResource MesDataGrid}">
@@ -141,8 +165,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
-                                            <ProgressBar Value="{Binding ProgressRate}" Maximum="100" Height="20" />
-                                            <TextBlock Text="{Binding ProgressRate, StringFormat={}{0:F1}%}" 
+                                            <ProgressBar Value="{Binding ProgressRate, Mode=OneWay}" Maximum="100" Height="20" />
+                                            <TextBlock Text="{Binding ProgressRate, StringFormat={}{0:F1}%, Mode=OneWay}" 
                                                        HorizontalAlignment="Center" 
                                                        VerticalAlignment="Center" />
                                         </Grid>
@@ -191,7 +215,10 @@
             </materialDesign:Card>
 
             <!-- 상세 정보 -->
-            <materialDesign:Card Grid.Column="1" Padding="16">
+            <materialDesign:Card Grid.Row="1"
+                                 Grid.Column="1" 
+                                 Padding="16"
+                                 Visibility="{Binding IsFullViewMode, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

@@ -14,5 +14,8 @@
     <converters:PercentageConverter x:Key="PercentageConverter" />
     <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter" />
     <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+    <converters:BoolToIconConverter x:Key="BoolToIconConverter" />
+    <converters:BoolToTextConverter x:Key="BoolToTextConverter" />
+    <converters:BoolToColumnSpanConverter x:Key="BoolToColumnSpanConverter" />
 
 </ResourceDictionary>

@@ -15,8 +15,6 @@ public partial class EquipmentViewModel : ViewModelBase
     private readonly IEquipmentService _equipmentService;
     private readonly IDialogService _dialogService;
 
-    private System.Timers.Timer? _refreshTimer;
-
     [ObservableProperty]
     private string? _selectedLineCode;
 
@@ -31,6 +29,10 @@ public partial class EquipmentViewModel : ViewModelBase
 
     [ObservableProperty]
     private Equipment? _selectedEquipment;
+
+    // 전체보기 모드
+    [ObservableProperty]
+    private bool _isFullViewMode;
 
     [ObservableProperty]
     private ObservableCollection<string> _lineCodes = new();
@@ -75,28 +77,14 @@ public partial class EquipmentViewModel : ViewModelBase
 
     public override async Task InitializeAsync()
     {
-        await LoadDataAsync();
-        StartAutoRefresh();
-    }
-
-    public override Task CleanupAsync()
-    {
-        StopAutoRefresh();
-        return Task.CompletedTask;
-    }
-
-    private void StartAutoRefresh()
-    {
-        _refreshTimer = new System.Timers.Timer(5000); // 5초마다
-        _refreshTimer.Elapsed += async (s, e) => await LoadDataAsync();
-        _refreshTimer.Start();
-    }
-
-    private void StopAutoRefresh()
-    {
-        _refreshTimer?.Stop();
-        _refreshTimer?.Dispose();
-        _refreshTimer = null;
+        try
+        {
+            await LoadDataAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Equipment 초기화 오류: {ex.Message}");
+        }
     }
 
     private void OnEquipmentStatusChanged(object? sender, EquipmentStatusChangedEventArgs e)
@@ -202,5 +190,11 @@ public partial class EquipmentViewModel : ViewModelBase
     private void ViewDetails(Equipment equipment)
     {
         // TODO: 설비 상세 화면으로 이동
+    }
+
+    [RelayCommand]
+    private void ToggleFullView()
+    {
+        IsFullViewMode = !IsFullViewMode;
     }
 }
